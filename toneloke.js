@@ -97,12 +97,15 @@ toneloke = (function () {
   }
 
   function uniq (array, isSorted, iteratee) {
-    return array.reduce(function (acc, curr) {
-      if (!acc.includes(curr)) {
-        acc.push(curr)
+    var ary = array
+    var results = []
+    if (iteratee) { ary = array.map(iteratee) }
+    for (var i = 0; i < ary.length; i++) {
+      if (ary.indexOf(ary[i]) === i) {
+        results.push(array[i])
       }
-      return acc
-    }, [])
+    }
+    return results
   }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -154,32 +157,45 @@ toneloke = (function () {
 
 toneloke.each({one: 1, two: 2, three: 3}, n => console.log(n * n))
 console.log('------^each---------------------------------------')
+
 console.log(toneloke.map([1, 2, 3], n => n * n))
 console.log('------^map----------------------------------------')
+
 console.log(toneloke.reduce([1, 2, 3], function (memo, n) { return memo + n }))
 console.log('------^reduce-------------------------------------')
+
 console.log(toneloke.find([1, 2, 3, 4, 5, 6, 7, 8], n => n % 2  === 0 ))
 console.log('------^find---------------------------------------')
+
 console.log(toneloke.filter([1, 2, 3, 4, 5, 6, 7, 8], n => n % 2 === 0))
 console.log('------^filter)------------------------------------')
+
 console.log(toneloke.sortBy([1, 3, 4, 8, 2], n => n * n))
 console.log('------^sortBy(broken)-----------------------------')
+
 console.log(toneloke.size([1, 2, 3]))
 console.log(toneloke.size({one: 1, two: 2, three: 3}))
 console.log('------^size---------------------------------------')
+
 console.log(toneloke.first([1, 2, 3, 4, 5, 6, 7, 8], 3))
 console.log('------^first--------------------------------------')
+
 console.log(toneloke.last([1, 2, 3, 4, 5, 6, 7, 8]))
 console.log('------^last---------------------------------------')
+
 console.log(toneloke.compact([0, 1, false, 2, '', 3]))
 console.log('------^compact------------------------------------')
+
 console.log(toneloke.flatten([1, [2], [3, [[4]]]]))
 console.log('------^flatten------------------------------------')
-console.log(toneloke.uniq([1, 2, 1, 4, 1, 3]))
+
+console.log(toneloke.uniq([-1, 2, 3, 4, 1, -2, -3, -3], null))
 console.log('------^uniq---------------------------------------')
+
 console.log(toneloke.keys({one: 1, two: 2, three: 3}))
 console.log(toneloke.values({one: 1, two: 2, three: 3}))
 console.log('------^keys&vals----------------------------------')
+
 console.log(toneloke.functions(toneloke))
 console.log('------^functions----------------------------------')
 
