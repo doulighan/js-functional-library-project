@@ -62,19 +62,6 @@ toneloke = (function () {
     return results
   }
 
-  function sortBy(list, iteratee) {
-    if (list.length <= 1 ) {
-      return list
-    }
-
-    var pivot =  list.shift()
-    var leftSort = filter(list, iteratee) <= pivot
-    var rightSort =  filter(list, iteratee) > pivot
-
-    sortBy(leftSort, iteratee) + [pivot] + sortBy(rightSort, iteratee)
-
-  }
-
   function sortBy (list, iteratee) {
     copy = list
     return copy.sort(iteratee)
@@ -141,14 +128,11 @@ toneloke = (function () {
 
   function functions (object) {
     functions = []
-    for (func in object) {
-      if (typeof object[func] == 'function') { functions.push(func) }
-      }
+    for (prop in object) {
+      if (typeof object[prop] == 'function') { functions.push(prop) }
     }
     return functions
   }
-
-  a: "1"
 
   return {
     each,
