@@ -1,36 +1,36 @@
 toneloke = (function () {
 
-  function each (list, iteratee, context) {
+  function each (list, callback, context) {
     for (var prop in list) {
       if (context !== undefined) {
-        iteratee.call(context,list[prop])
+        callback.call(context,list[prop])
       } else {
-      iteratee(list[prop], prop, list)
+      callback(list[prop], prop, list)
       }
     }
     return list
   }
 
-  function map (list, iteratee, context) {
+  function map (list, callback, context) {
     var results = []
     for (var prop in list) {
       if (context !== undefined) {
-        iteratee.call(context,list[prop])
+        callback.call(context,list[prop])
       } else {
-      results[prop] = iteratee(list[prop], prop, list)
+      results[prop] = callback(list[prop], prop, list)
       }
     }
     return results
   }
 
-  function reduce (list, iteratee, memo, context) {
+  function reduce (list, callback, memo, context) {
     let copy = list
     memo = memo || copy.shift()
     for (var prop in list) {
       if (context !== undefined) {
-        memo = iteratee.call(context,list[prop], prop, list)
+        memo = callback.call(context,list[prop], prop, list)
       } else {
-        memo = iteratee(memo, list[prop], prop, list)
+        memo = callback(memo, list[prop], prop, list)
       }
     }
     return memo
@@ -62,15 +62,15 @@ toneloke = (function () {
     return results
   }
 
-  function sortBy(list, iteratee) {
+  function sortBy(list, callback) {
     if (list.length <= 1 ) {
       return list
     }
     let pivot =  list[0]
     let newArray = list.slice(1 - list.length)
-    let leftSort = toneloke.filter(newArray, n => (iteratee(n) <= iteratee(pivot)))
-    let rightSort = toneloke.filter(newArray, n => (iteratee(n) > iteratee(pivot)))
-    return  sortBy(leftSort, iteratee).concat([pivot].concat(sortBy(rightSort, iteratee)))
+    let leftSort = toneloke.filter(newArray, n => (callback(n) <= callback(pivot)))
+    let rightSort = toneloke.filter(newArray, n => (callback(n) > callback(pivot)))
+    return  sortBy(leftSort, callback).concat([pivot].concat(sortBy(rightSort, callback)))
   }
 
   function size (list) {
@@ -102,10 +102,10 @@ toneloke = (function () {
     }, [])
   }
 
-  function uniq (array, isSorted, iteratee) {
+  function uniq (array, isSorted, callback) {
     var ary = array
     var results = []
-    if (iteratee) { ary = array.map(iteratee) }
+    if (callback) { ary = array.map(callback) }
     for (var i = 0; i < ary.length; i++) {
       if (ary.indexOf(ary[i]) === i) {
         results.push(array[i])
