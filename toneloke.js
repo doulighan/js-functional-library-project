@@ -1,4 +1,5 @@
 toneloke = (function () {
+
   function each (list, iteratee, context) {
     for (var prop in list) {
       if (context !== undefined) {
@@ -61,18 +62,18 @@ toneloke = (function () {
     return results
   }
 
-  // function sortBy(list, iteratee) {
-  //   if (list.length <= 1 ) {
-  //     return list
-  //   }
+  function sortBy(list, iteratee) {
+    if (list.length <= 1 ) {
+      return list
+    }
 
-  //   var pivot =  list.shift()
-  //   var leftSort = filter(list, iteratee) <= pivot
-  //   var rightSort =  filter(list, iteratee) > pivot
+    var pivot =  list.shift()
+    var leftSort = filter(list, iteratee) <= pivot
+    var rightSort =  filter(list, iteratee) > pivot
 
-  //   sortBy(leftSort, iteratee) + [pivot] + sortBy(rightSort, iteratee)
+    sortBy(leftSort, iteratee) + [pivot] + sortBy(rightSort, iteratee)
 
-  // }
+  }
 
   function sortBy (list, iteratee) {
     copy = list
@@ -84,6 +85,8 @@ toneloke = (function () {
     for (prop in list) { i++ }
     return i
   }
+
+///////////////////////////////////////////////////////////////////////////////
 
   function first (array, n) {
     return n ? array.slice(0, n) : array.slice(0, 1)
@@ -116,6 +119,8 @@ toneloke = (function () {
     }, [])
   }
 
+//////////////////////////////////////////////////////////////////////////////
+
   function keys (object) {
     keys = []
     for (prop in object) {
@@ -132,10 +137,13 @@ toneloke = (function () {
     return vals
   }
 
+  ///////////////////////////////////////////////////////////////////////////
+
   function functions (object) {
     functions = []
     for (func in object) {
-      functions.push(func)
+      if (typeof object[func] == 'function') { functions.push(func) }
+      }
     }
     return functions
   }
