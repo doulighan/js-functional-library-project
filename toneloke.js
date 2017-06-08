@@ -148,6 +148,8 @@ toneloke = (function () {
     return functions
   }
 
+  a: "1"
+
   return {
     each,
     map,
