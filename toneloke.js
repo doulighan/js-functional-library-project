@@ -97,7 +97,6 @@ toneloke = (function () {
   }
 
   function uniq (array, isSorted, iteratee) {
-
     return array.reduce(function (acc, curr) {
       if (!acc.includes(curr)) {
         acc.push(curr)
