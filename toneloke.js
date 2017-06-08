@@ -62,9 +62,15 @@ toneloke = (function () {
     return results
   }
 
-  function sortBy (list, iteratee) {
-    copy = list
-    return copy.sort(iteratee)
+  function sortBy(list, iteratee) {
+    if (list.length <= 1 ) {
+      return list
+    }
+    let pivot =  list[0]
+    let newArray = list.slice(1 - list.length)
+    let leftSort = toneloke.filter(newArray, n => (iteratee(n) <= iteratee(pivot)))
+    let rightSort = toneloke.filter(newArray, n => (iteratee(n) > iteratee(pivot)))
+    return  sortBy(leftSort, iteratee).concat([pivot].concat(sortBy(rightSort, iteratee)))
   }
 
   function size (list) {
@@ -91,8 +97,8 @@ toneloke = (function () {
     copy = array
     if (shallow) { return [].concat.apply([], copy) }
 
-    return copy.reduce(function (flat, toFlatten) {
-      return flat.concat(Array.isArray(toFlatten) ? flatten(toFlatten) : toFlatten)
+    return copy.reduce(function (acc, curr) {
+      return acc.concat(Array.isArray(curr) ? flatten(curr) : curr)
     }, [])
   }
 
@@ -106,6 +112,10 @@ toneloke = (function () {
       }
     }
     return results
+  }
+
+  function bind (meth, object, ...args) {
+    return meth.bind(object, args)
   }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -148,6 +158,7 @@ toneloke = (function () {
     last,
     compact,
     flatten,
+    bind,
     uniq,
     keys,
     values,
@@ -170,8 +181,8 @@ console.log('------^find---------------------------------------')
 console.log(toneloke.filter([1, 2, 3, 4, 5, 6, 7, 8], n => n % 2 === 0))
 console.log('------^filter)------------------------------------')
 
-console.log(toneloke.sortBy([1, 3, 4, 8, 2], n => n * n))
-console.log('------^sortBy(broken)-----------------------------')
+console.log(toneloke.sortBy([1, -3, 4, 8, -2], n => n * n))
+console.log('------^sortBy-------------------------------------')
 
 console.log(toneloke.size([1, 2, 3]))
 console.log(toneloke.size({one: 1, two: 2, three: 3}))
@@ -189,6 +200,11 @@ console.log('------^compact------------------------------------')
 console.log(toneloke.flatten([1, [2], [3, [[4]]]]))
 console.log('------^flatten------------------------------------')
 
+var func = function(greeting){ return greeting + ': ' + this.name };
+func = toneloke.bind(func, {name: 'moe'}, 'hi');
+console.log(func())
+console.log('------^bind------------------------------------')
+
 console.log(toneloke.uniq([-1, 2, 3, 4, 1, -2, -3, -3], null))
 console.log('------^uniq---------------------------------------')
 
@@ -198,7 +214,6 @@ console.log('------^keys&vals----------------------------------')
 
 console.log(toneloke.functions(toneloke))
 console.log('------^functions----------------------------------')
-
 
 
 
